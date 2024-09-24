@@ -29,8 +29,6 @@ export async function Request(parameters: ParametersProps): Promise <any> {
    
     const response: Response = await fetch(appEndpoint, options);
 
-    console.log(response)
-
     if ((response.status == 401 || response.status == 403)) {
         return await Request(parameters);
     }
