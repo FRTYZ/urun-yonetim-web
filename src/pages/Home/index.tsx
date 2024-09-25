@@ -240,6 +240,8 @@ function index() {
         []
     );
 
+                        // Function
+
     // CRUD Functions
     const addFormik = useFormik({
         initialValues: {
@@ -313,7 +315,7 @@ function index() {
         onSubmit: async (values, { resetForm }) => {
             const {name, description, price, stock, featuredImage } = values;
 
-            if(name == '' || description == '' || price == '' || stock == ''){
+            if(name == '' || description == '' || price == ''){
                 Swal.fire({
                     icon: 'error',
                     title: 'Hata',
@@ -407,6 +409,15 @@ function index() {
         }
     }
 
+    // Input function
+    const handleNumberInputChange = (event: React.ChangeEvent<HTMLInputElement>, handleFormik: any, name: string, startNumber: number = 0) => {
+        const inputValue = event.target.value;
+
+        if (inputValue === '' || (/^\d+$/.test(inputValue) && Number(inputValue) >= startNumber)) {
+            handleFormik.setFieldValue(name, inputValue);
+        }
+    };
+
     // Forms
     const addProductForm = (
         <div className="bg-white text-left px-4 md:p-8 mb-6">
@@ -462,7 +473,10 @@ function index() {
                         label='Ürün Fiyatı'
                         errorMessage={Boolean(addFormik.values.price == '' && addFormik.touched.price) ? 'Ürün fiyatı belirlemelisiniz' : ''}
                         value={addFormik.values.price}
-                        onChange={addFormik.handleChange}
+                        onChange={(event) =>{
+                            addFormik.handleChange;
+                            handleNumberInputChange(event, addFormik, 'price', 1)
+                        }}
                         tabIndex={4}
                     />
                     <XInput
@@ -473,7 +487,10 @@ function index() {
                         label='Stok miktarı'
                         errorMessage={Boolean(addFormik.values.stock == '' && addFormik.touched.stock) ? 'Ürün stok durumunu belirlemelisiniz' : ''}
                         value={addFormik.values.stock}
-                        onChange={addFormik.handleChange}
+                        onChange={(event) =>{
+                            addFormik.handleChange;
+                            handleNumberInputChange(event, addFormik, 'stock', 1)
+                        }}
                         tabIndex={5}
                     />
                     <div className="md:col-span-5 text-right">
@@ -550,7 +567,10 @@ function index() {
                         label='Ürün Fiyatı'
                         errorMessage={Boolean(updateFormik.values.price == '' && updateFormik.touched.price) ? 'Ürün fiyatı belirlemelisiniz' : ''}
                         value={String(updateFormik.values.price)}
-                        onChange={updateFormik.handleChange}
+                        onChange={(event) =>{
+                            updateFormik.handleChange;
+                            handleNumberInputChange(event, updateFormik, 'price', 1)
+                        }}
                         tabIndex={4}
                     />
                     <XInput
@@ -561,7 +581,11 @@ function index() {
                         label='Stok miktarı'
                         errorMessage={Boolean(updateFormik.values.stock == '' && updateFormik.touched.stock) ? 'Ürün stok durumunu belirlemelisiniz' : ''}
                         value={String(updateFormik.values.stock)}
-                        onChange={updateFormik.handleChange}
+                        helperText='Stok durumunu 0 değeriyle stoktan kaldırabilirsiniz.'
+                        onChange={(event) =>{
+                            updateFormik.handleChange;
+                            handleNumberInputChange(event, updateFormik, 'stock')
+                        }}
                         tabIndex={5}
                     />
                     <div className="md:col-span-5 text-right">
