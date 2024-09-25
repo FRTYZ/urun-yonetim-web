@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({
     const [globalFilter, setGlobalFilter] = useState("");
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
-        pageSize: 20,
+        pageSize: 10,
     });
 
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -222,7 +222,7 @@ export function DataTable<TData, TValue>({
                                   textStyle='text-black text-[16px] font-[600]'
                                   padding='p-[5px]'
                                   radius='rounded-lg'
-                                  addStyle="w-fit border border-gray-400"
+                                  addStyle="!w-fit border border-gray-400"
                               />
                               <XButton 
                                   label="İleri"
@@ -231,7 +231,7 @@ export function DataTable<TData, TValue>({
                                   textStyle='text-black text-[16px] font-[600]'
                                   padding='p-[5px]'
                                   radius='rounded-lg'
-                                  addStyle="w-fit border border-gray-400"
+                                  addStyle="!w-fit border border-gray-400"
                               />
                           </div>
                       </div>
