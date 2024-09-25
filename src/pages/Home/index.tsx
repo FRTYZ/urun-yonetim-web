@@ -230,6 +230,7 @@ function index() {
                                 padding='px-8 py-3'
                                 radius='rounded-lg'
                                 addStyle="!w-fit flex items-center gap-2"
+                                onClick={() => handleDeleteProduct(data)}
                             />
                         </div>
                     );
@@ -313,7 +314,6 @@ function index() {
             const {name, description, price, stock, featuredImage } = values;
             console.log(values)
             if(name == '' || description == '' || price == '' || stock == ''){
-             
                 Swal.fire({
                     icon: 'error',
                     title: 'Hata',
@@ -360,6 +360,52 @@ function index() {
             }
         }
     })
+
+    const handleDeleteProduct = async(productValue: ProductsProps) => {
+        const {value} = await Swal.fire({
+            title: 'Ürün Silme İşlemi',
+            text: `"${productValue._id}" numaralı "${productValue.name}" adlı ürünü silmek istediğinizden emin misiniz ?`,
+            html: `
+                Ürünü silmek istediğinizden emin misiniz ? <br/>
+                ID:  <b>${productValue._id}</b> <br/>
+                Ürün Adı:  <b>${productValue.name}</b> <br/>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Vazgeç',
+            confirmButtonText: 'Silinsin, Kabul ediyorum',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+        })
+
+        if(value){
+            const url = '/product/list/' + productValue?._id;
+
+            const result = await Request({
+                method: 'DELETE',
+                url: url
+            });
+
+            const responseCheck = Object.keys(result).filter(item => item == 'success')
+
+            if(responseCheck){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'İşlem Başarılı',
+                    html: 'Ürün başarıyla güncellendi',
+                    confirmButtonText: 'Tamam'
+                });
+                queryClient.invalidateQueries('products');
+            }
+            else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hata',
+                    text: 'Gerekli alanları doldurmalısınız.',
+                })
+            }
+        }
+    }
 
     // htmlForms
     const addhtmlForm = (
