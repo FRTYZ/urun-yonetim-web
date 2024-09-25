@@ -219,6 +219,7 @@ export function DataTable<TData, TValue>({
                               <XButton 
                                   label="Geri"
                                   disabled={!table.getCanPreviousPage()}
+                                  onClick={() => table.previousPage()}
                                   textStyle='text-black text-[16px] font-[600]'
                                   padding='p-[5px]'
                                   radius='rounded-lg'
