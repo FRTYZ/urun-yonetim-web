@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { ColumnDef } from "@tanstack/react-table";
 
 // Helpers
@@ -15,7 +15,7 @@ import XInput from '../../components/FormElements/XInput';
 import XFile from '../../components/FormElements/XFile';
 
 // Other npm packages
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useFormik } from 'formik';
 import Swal from 'sweetalert2'
 
@@ -36,6 +36,8 @@ export interface ProductsProps {
 }
 
 function index() {
+    // useStates
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const getProducts = async() => {
         const productUrl = "/product/list";
@@ -63,6 +65,8 @@ function index() {
             refetchInterval: false, // Otomatik yenileme kapalı
         }
     );
+
+    const queryClient = useQueryClient();
 
     const columns: ColumnDef<ProductsProps>[] = useMemo(
         () => [
@@ -214,7 +218,6 @@ function index() {
     );
 
     // CRUD Functions
-
     const addFormik = useFormik({
         enableReinitialize: true,
         initialValues: {
@@ -222,12 +225,12 @@ function index() {
             description: '',
             price: '',
             stock: '',
-            featuredImage: []
+            featuredImage: ''
         },
-        onSubmit: async (values) => {
+        onSubmit: async (values, { resetForm }) => {
             const {name, description, price, stock, featuredImage } = values;
-            console.log(values)
-            if(name == '' || description == '' || price == '' || stock == ''){
+
+            if(name == '' || description == '' || price == '' || stock == '' || featuredImage == ''){
              
                 Swal.fire({
                     icon: 'error',
@@ -256,9 +259,13 @@ function index() {
                     Swal.fire({
                         icon: 'success',
                         title: 'İşlem Başarılı',
-                        html: 'Ürün başarıyla eklend',
+                        html: 'Ürün başarıyla eklendi',
                         confirmButtonText: 'Tamam'
-                    })
+                    });
+
+                    queryClient.invalidateQueries('products'); 
+                    setIsDrawerOpen(false);
+                    resetForm();
                 }
                 else {
                     Swal.fire({
@@ -284,8 +291,18 @@ function index() {
                     method='POST'
                     onSubmit={addFormik.handleSubmit}
                     encType='multipart/form-data'
-                    className="lg:col-span-2 block space-y-4"
+                    className="lg:col-span-2 block space-y-6"
                 >
+                    <XFile 
+                        label='Ürün fotoğrafı'
+                        name="featuredImage"
+                        oldFileName=''
+                        type='image'
+                        handleFormik={addFormik}
+                        accept='image/png, image/jpeg'
+                        tabIndex={1}
+                        hasError={Boolean(addFormik.values.featuredImage == '' && addFormik.touched.featuredImage) ? 'Ürün fotoğrafını seçmelisiniz.' : ''}
+                    />
                     <XInput
                         type='text'
                         name='name'
@@ -295,7 +312,7 @@ function index() {
                         errorMessage={Boolean(addFormik.values.name == '' && addFormik.touched.name) ? 'Ürün adı doldurmalısınız' : ''}
                         value={addFormik.values.name}
                         onChange={addFormik.handleChange}
-                        tabIndex={1}
+                        tabIndex={2}
                     />
                     <XInput
                         type='text'
@@ -306,7 +323,7 @@ function index() {
                         errorMessage={Boolean(addFormik.values.description == '' && addFormik.touched.description) ? 'Ürün açıklamasını doldurmalısınız' : ''}
                         value={addFormik.values.description}
                         onChange={addFormik.handleChange}
-                        tabIndex={2}
+                        tabIndex={3}
                     />
                     <XInput
                         type='number'
@@ -317,26 +334,18 @@ function index() {
                         errorMessage={Boolean(addFormik.values.price == '' && addFormik.touched.price) ? 'Ürün fiyatı belirlemelisiniz' : ''}
                         value={addFormik.values.price}
                         onChange={addFormik.handleChange}
-                        tabIndex={3}
+                        tabIndex={4}
                     />
                     <XInput
                         type='number'
                         name='stock'
-                        placeholder='Stok durumu'
+                        placeholder='Stok miktarı'
                         labelType='top'
-                        label='Stok durumu'
+                        label='Stok miktarı'
                         errorMessage={Boolean(addFormik.values.stock == '' && addFormik.touched.stock) ? 'Ürün stok durumunu belirlemelisiniz' : ''}
                         value={addFormik.values.stock}
                         onChange={addFormik.handleChange}
-                        tabIndex={4}
-                    />
-                     <XFile 
-                        label='Ürün fotoğrafı'
-                        name="featuredImage"
-                        oldFileName=''
-                        type='image'
-                        handleFormik={addFormik}
-                        accept='image/png, image/jpeg'
+                        tabIndex={5}
                     />
                     <div className="md:col-span-5 text-right">
                         <XButton 
@@ -372,10 +381,12 @@ function index() {
                                         addStyle="!w-fit"
                                     />
                                 }
+                                isOpen={isDrawerOpen}
+                                onOpenChange={(open) => setIsDrawerOpen(open)}
                                 backgroundColor='bg-white dark:bg-primary-dark'
                                 side='right'
                                 padding='px-8 pt-12'
-                                width='w-[80vw]'
+                                width='w-[100vw] lg:w-[80vw]'
                             >
                                 {addhtmlForm}
                             </Drawer>
