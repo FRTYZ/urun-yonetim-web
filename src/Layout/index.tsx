@@ -3,13 +3,6 @@ import {ReactNode, lazy} from 'react'
 const Navbar = lazy(() => import('./Navbar'));
 const Footer = lazy(() => import('./Footer'));
 
-import { LazyCard, LazyHero } from '../components/Lazy';
-
-import { useQuery } from 'react-query';
-import { GetUserAllRepos } from '../helpers/Request';
-
-import { RepositoryTypes } from '../helpers/interface';
-
 interface LayoutProps {
     children?: ReactNode;
 }

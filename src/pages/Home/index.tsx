@@ -59,12 +59,12 @@ function index() {
         error 
     } = useQuery<ProductsProps[]>('products', getProducts,
         {
-            staleTime: 1000 * 60 * 5, // 5 dakika boyunca veri taze kabul edilir
-            cacheTime: 1000 * 60 * 30, // 30 dakika boyunca veri cache'de tutulur
-            refetchOnWindowFocus: false, // Pencere odağa geldiğinde yeniden fetch etmez
-            refetchOnMount: false, // Bileşen her mount edildiğinde yeniden fetch etmez
-            refetchOnReconnect: true, // Bağlantı yeniden kurulduğunda fetch eder
-            refetchInterval: false, // Otomatik yenileme kapalı
+            staleTime: 1000 * 60 * 5,
+            cacheTime: 1000 * 60 * 30,
+            refetchOnWindowFocus: false, 
+            refetchOnMount: false, 
+            refetchOnReconnect: true, 
+            refetchInterval: false,
         }
     );
 
@@ -75,7 +75,7 @@ function index() {
             {
                 Header: '#',
                 accessorKey: "_id",
-                header: ({ column }) => {
+                header: () => {
                     return (
                         <div  className="flex items-center gap-2 cursor-pointer hover:text-zinc-700">
                             Ürün Fotoğrafı
@@ -312,7 +312,7 @@ function index() {
         },
         onSubmit: async (values, { resetForm }) => {
             const {name, description, price, stock, featuredImage } = values;
-            console.log(values)
+
             if(name == '' || description == '' || price == '' || stock == ''){
                 Swal.fire({
                     icon: 'error',
@@ -407,8 +407,8 @@ function index() {
         }
     }
 
-    // htmlForms
-    const addhtmlForm = (
+    // Forms
+    const addProductForm = (
         <div className="bg-white text-left px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                 <div className="text-gray-600 mb-4">
@@ -492,7 +492,7 @@ function index() {
         </div>
     )
 
-    const updateForm = (
+    const updateProductForm = (
         <div className="bg-white text-left px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                 <div className="text-gray-600 mb-4">
@@ -594,7 +594,7 @@ function index() {
                         padding='px-8 pt-12'
                         width='w-[100vw] lg:w-[80vw]'
                     >
-                        {updateForm}
+                        {updateProductForm}
                     </Drawer>
                     <header  className="grid grid-cols-2 px-3 py-4 items-center border-b border-gray-100">
                         <h2  className="font-semibold text-gray-800">Ürünler</h2>
@@ -617,14 +617,14 @@ function index() {
                                 padding='px-8 pt-12'
                                 width='w-[100vw] lg:w-[80vw]'
                             >
-                                {addhtmlForm}
+                                {addProductForm}
                             </Drawer>
                         </div>
                     </header>
                     <DataTable
                         data={products}
                         columns={columns}
-                        subHeader="Ürünlerinizi yönetin ve satış perhtmlFormanslarını görüntüleyin."
+                        subHeader="Ürünlerinizi yönetin ve satışınızı görüntüleyin."
                         searchFilter={true}
                     />
                 </div>
