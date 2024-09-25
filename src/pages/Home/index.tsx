@@ -12,7 +12,7 @@ import Drawer from '../../components/Drawer';
 // Form Elements
 import XButton from '../../components/FormElements/XButton';
 import XInput from '../../components/FormElements/XInput';
-import XFile from '../../components/FormElements/XFile';
+import { OldFileInput, XFile } from '../../components/FormElements/XFile';
 
 // Other npm packages
 import { useQuery, useQueryClient } from 'react-query';
@@ -38,6 +38,8 @@ export interface ProductsProps {
 function index() {
     // useStates
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isDrawerUpdateFormOpen, setIsDrawerFormOpen] = useState(false);
+    const [selectData, setSelectData] = useState<ProductsProps>()
 
     const getProducts = async() => {
         const productUrl = "/product/list";
@@ -189,6 +191,7 @@ function index() {
                 id: "actions",
                 header: () => <span  className="whitespace-nowrap hover:text-zinc-700">Actions</span>,
                 cell: ({ row }) => {
+                    const data = row.original
                     return (
                         <div  className="flex items-center justify-end gap-4">
                             <XButton 
@@ -206,6 +209,12 @@ function index() {
                                 padding='px-8 py-3'
                                 radius='rounded-lg'
                                 addStyle="!w-fit flex items-center gap-2"
+                                onClick={() => 
+                                    {
+                                        setSelectData(data)
+                                        setIsDrawerFormOpen(!isDrawerUpdateFormOpen)
+                                    }
+                                }
                             />
                             <XButton 
                                 label={
@@ -232,7 +241,6 @@ function index() {
 
     // CRUD Functions
     const addFormik = useFormik({
-        enableReinitialize: true,
         initialValues: {
             name: '',
             description: '',
@@ -287,6 +295,68 @@ function index() {
                         text: 'Bir sorun oluştu',
                     })
                 } 
+            }
+        }
+    })
+
+    const updateFormik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            name: (selectData && selectData.name) || '',
+            description: (selectData && selectData.description) || '',
+            price: (selectData ? selectData.price : ''),
+            stock: (selectData ? selectData.stock : ''),
+            oldImage: (selectData?.featuredImage ? [selectData?.featuredImage] : ''),
+            featuredImage: ''
+        },
+        onSubmit: async (values, { resetForm }) => {
+            const {name, description, price, stock, featuredImage } = values;
+            console.log(values)
+            if(name == '' || description == '' || price == '' || stock == ''){
+             
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hata',
+                    text: 'Gerekli alanları doldurmalısınız.',
+                })
+            }
+            else{
+                const formdata = new FormData();
+
+                formdata.append("name", name!);
+                formdata.append("description", description!);
+                formdata.append("price", price.toString());
+                formdata.append("stock", stock.toString());
+                featuredImage !== '' && formdata.append('featuredImage', featuredImage);
+                
+                const url = '/product/list/' + selectData?._id ;
+
+                const response = await Request({
+                    method: 'PUT',
+                    url: url,
+                    formData: formdata
+                });
+                
+                const responseCheck = Object.keys(response).filter(item => item == 'success')
+                if (responseCheck) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'İşlem Başarılı',
+                        html: 'Ürün başarıyla güncellendi',
+                        confirmButtonText: 'Tamam'
+                    });
+
+                    queryClient.invalidateQueries('products'); 
+                    setIsDrawerFormOpen(false);
+                    resetForm();
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata',
+                        text: 'Bir sorun oluştu',
+                    })
+                }
             }
         }
     })
@@ -376,10 +446,110 @@ function index() {
         </div>
     )
 
+    const updateForm = (
+        <div className="bg-white text-left px-4 md:p-8 mb-6">
+            <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+                <div className="text-gray-600 mb-4">
+                    <p className="font-medium text-lg">Ürün Güncelleme</p>
+                    <p>Lütfen gerekli alanları doldurun</p>
+                </div>
+                <form
+                    method='PUT'
+                    onSubmit={updateFormik.handleSubmit}
+                    className="lg:col-span-2 block space-y-6"
+                >
+                    <XFile 
+                        label='Ürün fotoğrafı'
+                        name="featuredImage"
+                        oldFileName='oldImage'
+                        type='image'
+                        handleFormik={updateFormik}
+                        accept='image/png, image/jpeg'
+                        tabIndex={1}
+                        hasError={Boolean(updateFormik.values.featuredImage == '' && addFormik.touched.featuredImage) ? 'Ürün fotoğrafını seçmelisiniz.' : ''}
+                    />
+                    <OldFileInput 
+                        name="oldImage"
+                        value={updateFormik.values.oldImage ? [updateFormik.values.oldImage]: []}
+                        type="image"
+                        handleFormik={updateFormik}
+                    />
+                    <XInput
+                        type='text'
+                        name='name'
+                        placeholder='Ürün Adı'
+                        labelType='top'
+                        label='Ürün Adı'
+                        errorMessage={Boolean(updateFormik.values.name == '' && updateFormik.touched.name) ? 'Ürün adı doldurmalısınız' : ''}
+                        value={updateFormik.values.name}
+                        onChange={updateFormik.handleChange}
+                        tabIndex={2}
+                    />
+                    <XInput
+                        type='text'
+                        name='description'
+                        placeholder='Ürün Açıklaması'
+                        labelType='top'
+                        label='Ürün Açıklaması'
+                        errorMessage={Boolean(updateFormik.values.description == '' && updateFormik.touched.description) ? 'Ürün açıklamasını doldurmalısınız' : ''}
+                        value={updateFormik.values.description}
+                        onChange={updateFormik.handleChange}
+                        tabIndex={3}
+                    />
+                    <XInput
+                        type='number'
+                        name='price'
+                        placeholder='Ürün Fiyatı'
+                        labelType='top'
+                        label='Ürün Fiyatı'
+                        errorMessage={Boolean(updateFormik.values.price == '' && updateFormik.touched.price) ? 'Ürün fiyatı belirlemelisiniz' : ''}
+                        value={String(updateFormik.values.price)}
+                        onChange={updateFormik.handleChange}
+                        tabIndex={4}
+                    />
+                    <XInput
+                        type='number'
+                        name='stock'
+                        placeholder='Stok miktarı'
+                        labelType='top'
+                        label='Stok miktarı'
+                        errorMessage={Boolean(updateFormik.values.stock == '' && updateFormik.touched.stock) ? 'Ürün stok durumunu belirlemelisiniz' : ''}
+                        value={String(updateFormik.values.stock)}
+                        onChange={updateFormik.handleChange}
+                        tabIndex={5}
+                    />
+                    <div className="md:col-span-5 text-right">
+                        <XButton 
+                            type='submit'
+                            label="Ürünü Güncelle"
+                            backgroundColor='bg-black'
+                            textStyle='text-white text-[16px] font-[600]'
+                            padding='px-8 py-3'
+                            radius='rounded-lg'
+                            addStyle="!w-fit"
+                            tabIndex={6}
+                        />
+                    </div>
+                </form>
+            </div>
+        </div>
+    )
+
     return (
         <>
             {!isLoading && products ? (
                 <div  className="w-full mx-auto bg-white rounded-sm border border-gray-200">
+                    <Drawer
+                        buttonContent={null}
+                        isOpen={isDrawerUpdateFormOpen}
+                        onOpenChange={(open) => setIsDrawerFormOpen(open)}
+                        backgroundColor='bg-white dark:bg-primary-dark'
+                        side='right'
+                        padding='px-8 pt-12'
+                        width='w-[100vw] lg:w-[80vw]'
+                    >
+                        {updateForm}
+                    </Drawer>
                     <header  className="grid grid-cols-2 px-3 py-4 items-center border-b border-gray-100">
                         <h2  className="font-semibold text-gray-800">Ürünler</h2>
                         <div  className="text-end">
