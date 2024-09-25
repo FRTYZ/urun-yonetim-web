@@ -20,8 +20,6 @@ import { rankItem } from "@tanstack/match-sorter-utils";
 import XInput from "./FormElements/XInput";
 import XButton from "./FormElements/XButton";
 
-import { Link } from "react-router-dom";
-
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];

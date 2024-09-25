@@ -9,6 +9,7 @@ interface XInputProp {
     value?: string;
     placeholder?: string;
     errorMessage?: string;
+    helperText?: string;
     disabled?: boolean;
     sideContent?: ReactElement | null;
     sideContentPosition?: string;
@@ -25,6 +26,7 @@ export default function XInput({
     value,
     placeholder,
     errorMessage,
+    helperText,
     disabled,
     sideContent,
     sideContentPosition = 'right',
@@ -82,6 +84,7 @@ export default function XInput({
                 </span>
             )}
         </label>
+        {helperText && <p className="mt-2 text-gray-400">{helperText}</p>}
         {errorMessage && <p className="mt-2 text-red-400">{errorMessage}</p>}
     </div>
   )
