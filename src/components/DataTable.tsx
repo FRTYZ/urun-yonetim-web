@@ -20,12 +20,12 @@ import { rankItem } from "@tanstack/match-sorter-utils";
 import XInput from "./FormElements/XInput";
 import XButton from "./FormElements/XButton";
 
+import { Link } from "react-router-dom";
+
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    header?: string;
     subHeader?: string;
-    className?: string;
     searchFilter?: boolean;
 }
 
@@ -68,7 +68,7 @@ function DebouncedInput({
           placeholder="Search..."
           labelType="top"
           tabIndex={1}
-          addStyle="h-5 placeholder-gray-500"
+          addStyle="!h-5 placeholder-gray-500"
         />
     );
 }
@@ -76,9 +76,7 @@ function DebouncedInput({
 export function DataTable<TData, TValue>({
     columns,
     data,
-    header,
     subHeader,
-    className = "rounded-md border",
     searchFilter = false,
 }: DataTableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -121,10 +119,7 @@ export function DataTable<TData, TValue>({
     } - ${table.getPageCount()} arası gösteriliyor`;
 
     return (
-        <div className="w-full mx-auto bg-white rounded-sm border border-gray-200">
-            <header className="px-3 py-4 border-b border-gray-100">
-                <h2 className="font-semibold text-gray-800">{header}</h2>
-            </header>
+        <>
             <div className="grid grid-cols-2 items-center pl-3 py-4">
                 <p>{subHeader}</p>
                 {searchFilter && (
@@ -224,28 +219,26 @@ export function DataTable<TData, TValue>({
                               <XButton 
                                   label="Geri"
                                   disabled={!table.getCanPreviousPage()}
-                                  backgroundColor='bg-gray-400'
                                   textStyle='text-black text-[16px] font-[600]'
                                   padding='p-[5px]'
                                   radius='rounded-lg'
-                                  addStyle="w-fit"
+                                  addStyle="w-fit border border-gray-400"
                               />
                               <XButton 
                                   label="İleri"
                                   disabled={!table.getCanNextPage()}
                                   onClick={() => table.nextPage()}
-                                  backgroundColor='bg-gray-400'
                                   textStyle='text-black text-[16px] font-[600]'
                                   padding='p-[5px]'
                                   radius='rounded-lg'
-                                  addStyle="w-fit"
+                                  addStyle="w-fit border border-gray-400"
                               />
                           </div>
                       </div>
                     </tfoot>
                 </table>
             </div>
-        </div>
+        </>
     );
 }
 
