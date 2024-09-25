@@ -20,11 +20,11 @@ export default function XButton({
     icon: Icon,
     label,
     disabled,
-    backgroundColor,
-    textStyle,
-    padding,
-    margin,
-    radius,
+    backgroundColor = '',
+    textStyle = '',
+    padding = '',
+    margin = '',
+    radius = '',
     addStyle = '',
     onClick,
     ...rest
@@ -38,8 +38,8 @@ export default function XButton({
                     to={href}
                     onClick={onClick}
                     className={`
-                        w-full ${margin} ${padding} bg-${backgroundColor} ${textStyle}
-                        hover:${hoverStyle} rounded-${radius}
+                        w-full ${margin} ${padding} ${backgroundColor} ${textStyle}
+                        hover:${hoverStyle} ${radius}
                         ${disabled && 'opacity-50 cursor-not-allowed'}
                         ${addStyle}
                     `}

@@ -28,7 +28,7 @@ export default function XInput({
     disabled,
     sideContent,
     sideContentPosition = 'right',
-    addStyle,
+    addStyle = '',
     onChange,
     ...rest
 }: XInputProp) {
@@ -55,7 +55,7 @@ export default function XInput({
                 onChange={onChange}
                 className={`
                     ${addStyle}
-                    peer h-10 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm
+                    peer h-7 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm
                     disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none disabled:text-black
                 `}
                 {...rest}
@@ -82,7 +82,7 @@ export default function XInput({
                 </span>
             )}
         </label>
-        {errorMessage && <p className="mt-2">{errorMessage}</p>}
+        {errorMessage && <p className="mt-2 text-red-400">{errorMessage}</p>}
     </div>
   )
 }
