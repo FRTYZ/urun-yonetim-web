@@ -16,7 +16,15 @@ interface FileViewSectionProps {
     isOld: boolean;
 }
 
-const XFileViewSection: React.FC<FileViewSectionProps> = ({file, type, removeFunc, isOld}) => {
+interface OldFileInputProps {
+    name: string;
+    value: any[];
+    type: string;
+    handleFormik: any;
+}
+
+const XFileViewSection= ({file, type, removeFunc, isOld}: FileViewSectionProps) => {
+    const EndPoint = import.meta.env.VITE_ENDPOINT;
 
     return (
         <>
@@ -29,7 +37,7 @@ const XFileViewSection: React.FC<FileViewSectionProps> = ({file, type, removeFun
                 {isOld ? (
                     (type == 'image' ? (
                         <img 
-                            src={item?.url}
+                            src={EndPoint + item?.url}
                             style={{ objectFit: 'cover' }} 
                             width={100} 
                             height={100} 
@@ -69,7 +77,27 @@ const XFileViewSection: React.FC<FileViewSectionProps> = ({file, type, removeFun
     )
 }
 
-const XFile = ({label, name, oldFileName, type, setAlert, handleFormik, hasError, ...rest}: XFileProps) => {
+export const OldFileInput = ({name, value, type, handleFormik}: OldFileInputProps) => {
+    const removeSelectFile = (imageKey: number) => {
+        const newList = value?.filter((veri, key) => key !== imageKey && veri);
+        handleFormik.setFieldValue(name, newList.length == 0 && undefined);
+    }
+    
+    return (
+        <>
+            {value.length > 0 && (
+                <XFileViewSection 
+                    file={value[0]}
+                    type={type}
+                    removeFunc={removeSelectFile}
+                    isOld={true}
+                />
+            )}
+        </>
+    )
+}
+
+export const XFile = ({label, name, oldFileName, type, setAlert, handleFormik, hasError, ...rest}: XFileProps) => {
     const [file, setFile] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLDivElement | any>(null);
 
@@ -153,5 +181,3 @@ const XFile = ({label, name, oldFileName, type, setAlert, handleFormik, hasError
     )
 }
 
-
-export default XFile
