@@ -14,6 +14,9 @@ import XButton from '../../components/FormElements/XButton';
 import XInput from '../../components/FormElements/XInput';
 import { OldFileInput, XFile } from '../../components/FormElements/XFile';
 
+// Utils
+import { NumberInput } from '../../utils/numberInput';
+
 // Other npm packages
 import { useQuery, useQueryClient } from 'react-query';
 import { useFormik } from 'formik';
@@ -486,8 +489,8 @@ function index() {
                         errorMessage={Boolean(addFormik.values.price == '' && addFormik.touched.price) ? 'Ürün fiyatı belirlemelisiniz' : ''}
                         value={addFormik.values.price}
                         onChange={(event) =>{
-                            addFormik.handleChange;
-                            handleNumberInputChange(event, addFormik, 'price', 1)
+                            const filterValue = NumberInput(event, 1);
+                            filterValue && addFormik.setFieldValue('price', filterValue && filterValue);
                         }}
                         tabIndex={4}
                     />
@@ -500,8 +503,8 @@ function index() {
                         errorMessage={Boolean(addFormik.values.stock == '' && addFormik.touched.stock) ? 'Ürün stok durumunu belirlemelisiniz' : ''}
                         value={addFormik.values.stock}
                         onChange={(event) =>{
-                            addFormik.handleChange;
-                            handleNumberInputChange(event, addFormik, 'stock', 1)
+                            const filterValue =  NumberInput(event);
+                            filterValue && addFormik.setFieldValue('stock', filterValue);
                         }}
                         tabIndex={5}
                     />
@@ -580,8 +583,9 @@ function index() {
                         errorMessage={Boolean(updateFormik.values.price == '' && updateFormik.touched.price) ? 'Ürün fiyatı belirlemelisiniz' : ''}
                         value={String(updateFormik.values.price)}
                         onChange={(event) =>{
-                            updateFormik.handleChange;
-                            handleNumberInputChange(event, updateFormik, 'price', 1)
+                            const filterValue =  NumberInput(event, 1);
+                            
+                            filterValue && updateFormik.setFieldValue('price', filterValue);
                         }}
                         tabIndex={4}
                     />
@@ -595,8 +599,9 @@ function index() {
                         value={String(updateFormik.values.stock)}
                         helperText='Stok durumunu 0 değeriyle stoktan kaldırabilirsiniz.'
                         onChange={(event) =>{
-                            updateFormik.handleChange;
-                            handleNumberInputChange(event, updateFormik, 'stock')
+                            const filterValue =  NumberInput(event);
+                            
+                            filterValue && updateFormik.setFieldValue('stock', filterValue);
                         }}
                         tabIndex={5}
                     />
