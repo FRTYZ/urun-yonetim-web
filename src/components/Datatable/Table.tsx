@@ -16,11 +16,12 @@ import {
 
 import { rankItem } from "@tanstack/match-sorter-utils";
 
-// FormElements
-import XInput from "./FormElements/XInput";
-import XButton from "./FormElements/XButton";
+import Filters from "./Partials/Filters";
 
-interface DataTableProps<TData, TValue> {
+// FormElements
+import XButton from "../FormElements/XButton";
+
+interface TableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     subHeader?: string;
@@ -35,48 +36,13 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     return itemRank.passed;
 };
 
-function DebouncedInput({
-    value: initialValue,
-    onChange,
-    debounce = 500,
-}: {
-    value: string | number;
-    onChange: (value: string | number) => void;
-    debounce?: number;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
-    const [value, setValue] = useState(initialValue);
 
-    useEffect(() => {
-        setValue(initialValue);
-    }, [initialValue]);
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            onChange(value);
-        }, debounce);
-
-        return () => clearTimeout(timeout);
-    }, [value]);
-
-    return (
-        <XInput
-          type='text'
-          value={String(value)}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Search..."
-          labelType="top"
-          tabIndex={1}
-          addStyle="!h-5 placeholder-gray-500"
-        />
-    );
-}
-
-export function DataTable<TData, TValue>({
+export function Table<TData, TValue>({
     columns,
     data,
     subHeader,
     searchFilter = false,
-}: DataTableProps<TData, TValue>) {
+}: TableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
     const [globalFilter, setGlobalFilter] = useState("");
@@ -119,39 +85,15 @@ export function DataTable<TData, TValue>({
     return (
         <>
             <div className="grid grid-cols-2 items-center pl-3 py-4">
-                <p>{subHeader}</p>
-                {searchFilter && (
-                  <div className="flex gap-4 justify-end">
-                    <DebouncedInput
-                        value={globalFilter ?? ""}
-                        onChange={(value) =>
-                            setGlobalFilter(String(value))
-                        }
-                    />
-                    <select
-                        value={
-                            table.getState().pagination.pageSize
-                        }
-                        className="block rounded-md border-gray-300 focus:!border-transparent focus:!ring-black focus:!outline-black float-right mr-3"
-                        onChange={(e) => {
-                            table.setPageSize(
-                                Number(e.target.value)
-                            );
-                        }}
-                    >
-                        {[10, 20, 30, 40, 50].map(
-                            (pageSize) => (
-                                <option
-                                    key={pageSize}
-                                    value={pageSize}
-                                >
-                                    {pageSize}
-                                </option>
-                            )
-                        )}
-                    </select>
-                  </div>
-                )}
+            <p>{subHeader}</p>
+            {searchFilter && (
+                <Filters 
+                    pageSize={table.getState().pagination.pageSize}
+                    setPageSize={table.setPageSize}
+                    globalFilter={globalFilter ?? ""}
+                    setGlobalFilter={setGlobalFilter}
+                />
+            )} 
             </div>
             <div className="overflow-x-auto">
                 <table className="table-auto w-full">
@@ -241,4 +183,4 @@ export function DataTable<TData, TValue>({
     );
 }
 
-export default DataTable;
+export default Table;

@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Request } from '../../helpers/Request';
 
 // Components
-import DataTable from '../../components/DataTable';
+import Table from '../../components/Datatable/Table';
 import TableLazy from '../../components/TableLazy';
 import Drawer from '../../components/Drawer';
 
@@ -70,6 +70,7 @@ function index() {
 
     const queryClient = useQueryClient();
 
+  
     const columns: ColumnDef<ProductsProps>[] = useMemo(
         () => [
             {
@@ -166,9 +167,11 @@ function index() {
                         </div>
                     );
                 },
+
             },
             {
                 accessorKey: "stock",
+                
                 header: ({ column }) => {
                     return (
                         <div
@@ -184,6 +187,15 @@ function index() {
                                 <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
                             </svg>
                         </div>
+                    );
+                },
+                cell: ({ row }) => {
+                    const stockStatus = row.original.stock;
+
+                    return stockStatus > 0 ? (
+                        stockStatus
+                    ) : (
+                        <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Stokta Yok</span>
                     );
                 },
             },
@@ -645,7 +657,7 @@ function index() {
                             </Drawer>
                         </div>
                     </header>
-                    <DataTable
+                    <Table
                         data={products}
                         columns={columns}
                         subHeader="Ürünlerinizi yönetin ve satışınızı görüntüleyin."
