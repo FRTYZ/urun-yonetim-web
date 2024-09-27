@@ -243,7 +243,7 @@ const Filters = ({
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-4 items-center px-3 py-4 border-y border-gray-400">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-4 items-center py-4 border-y border-gray-400">
             <div className="flex gap-4 justify-start col-span-12 lg:col-span-4 lg:border-r lg:border-gray-300">
                 {pageSizeSelect}
                 <DebouncedInput

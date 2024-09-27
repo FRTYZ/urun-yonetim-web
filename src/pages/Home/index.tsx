@@ -630,7 +630,7 @@ function index() {
             >
                 {updateProductForm}
             </Drawer>
-            <header  className="grid grid-cols-2 px-3 py-4 items-center border-b border-gray-100">
+            <header  className="grid grid-cols-2 py-4 items-center border-b border-gray-100">
                 <h2  className="font-semibold text-gray-800">Ürünler</h2>
                 <div  className="text-end">
                         <Drawer

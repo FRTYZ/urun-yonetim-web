@@ -1,8 +1,8 @@
-import React from 'react'
-
 function Footer() {
   return (
-    <div>Footer</div>
+    <div className='my-8'>
+      <p>MUHİKU - Ürün Yönetim Sistemi Case Study | Fırat Yıldız</p>
+    </div>
   )
 }
 
