@@ -620,7 +620,7 @@ function index() {
     return (
         <>
             {!isLoading && products ? (
-                <div  className="w-full mx-auto bg-white rounded-sm">
+                <div  className="w-full mx-auto bg-white rounded-sm ">
                     <Drawer
                         buttonContent={null}
                         isOpen={isDrawerUpdateFormOpen}

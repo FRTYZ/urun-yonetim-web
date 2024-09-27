@@ -1,7 +1,7 @@
 
 function TableLazy() {
   return (
-    <div className="w-full mx-auto bg-white rounded-sm border border-gray-200">
+    <div className="w-full mx-auto bg-white rounded-sm">
         <header className="px-5 py-4 border-b border-gray-100">
             <div className='w-full h-5 bg-gray-600 animate-pulse'></div>
         </header>

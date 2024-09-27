@@ -19,6 +19,11 @@ import Filters from "./Partials/Filters";
 // FormElements
 import XButton from "../FormElements/XButton";
 
+interface TableRowData {
+    stock: number;
+    // Diğer alanlar burada tanımlanabilir
+}
+
 interface TableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
@@ -27,7 +32,7 @@ interface TableProps<TData, TValue> {
 }
 
 
-export function Table<TData, TValue>({
+export function Table<TData extends TableRowData, TValue>({
     columns,
     data,
     searchFilter = false,
@@ -111,6 +116,7 @@ export function Table<TData, TValue>({
                                             row.getIsSelected() &&
                                             "selected"
                                         }
+                                        className={row.original.stock === 0 ? 'bg-red-100' : ''}
                                     >
                                         {row
                                             .getVisibleCells()
