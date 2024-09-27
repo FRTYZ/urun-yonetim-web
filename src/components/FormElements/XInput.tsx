@@ -6,7 +6,7 @@ interface XInputProp {
     name?: string;
     label?: string;
     labelType?: | 'normal' | 'top';
-    value?: string;
+    value?: string | number;
     placeholder?: string;
     errorMessage?: string;
     helperText?: string;
