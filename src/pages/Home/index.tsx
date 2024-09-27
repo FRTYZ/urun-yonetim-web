@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { ColumnDef } from "@tanstack/react-table";
 
 // Helpers
@@ -42,14 +42,20 @@ function index() {
     // useStates
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isDrawerUpdateFormOpen, setIsDrawerFormOpen] = useState(false);
-    const [selectData, setSelectData] = useState<ProductsProps>()
+    const [selectData, setSelectData] = useState<ProductsProps>();
+    const [queryUrl, setQueryUrl] = useState<string>('/product/list');
+
+    // useEffects
+    useEffect(() => {
+        if(queryUrl !== ''){
+            getProducts();
+        }
+    }, [queryUrl]);
 
     const getProducts = async() => {
-        const productUrl = "/product/list";
-
         const products = await Request({
           method: 'GET',
-          url: productUrl
+          url: queryUrl
         });
 
         return products
@@ -59,17 +65,16 @@ function index() {
         data: products, 
         isLoading, 
         isError, 
-        error 
-    } = useQuery<ProductsProps[]>('products', getProducts,
-        {
-            staleTime: 1000 * 60 * 5,
-            cacheTime: 1000 * 60 * 30,
-            refetchOnWindowFocus: false, 
-            refetchOnMount: false, 
-            refetchOnReconnect: true, 
-            refetchInterval: false,
-        }
-    );
+        error, 
+        refetch 
+      } = useQuery<ProductsProps[]>(['products', queryUrl], () => getProducts(), {
+        staleTime: 1000 * 60 * 5,
+        cacheTime: 1000 * 60 * 30,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        refetchOnReconnect: true,
+        refetchInterval: false,
+    });
 
     const queryClient = useQueryClient();
 
@@ -240,7 +245,7 @@ function index() {
                                         Sil
                                     </>
                                 }
-                                backgroundColor='bg-black'
+                                backgroundColor='bg-red-500'
                                 textStyle='text-white text-[16px] font-[600]'
                                 padding='px-8 py-3'
                                 radius='rounded-lg'
@@ -424,15 +429,6 @@ function index() {
         }
     }
 
-    // Input function
-    const handleNumberInputChange = (event: React.ChangeEvent<HTMLInputElement>, handleFormik: any, name: string, startNumber: number = 0) => {
-        const inputValue = event.target.value;
-
-        if (inputValue === '' || (/^\d+$/.test(inputValue) && Number(inputValue) >= startNumber)) {
-            handleFormik.setFieldValue(name, inputValue);
-        }
-    };
-
     // Forms
     const addProductForm = (
         <div className="bg-white text-left px-4 md:p-8 mb-6">
@@ -441,7 +437,6 @@ function index() {
                     <p className="font-medium text-lg">Yeni Ürün Ekleme</p>
                     <p>Lütfen gerekli alanları doldurun</p>
                 </div>
-              
                 <form
                     method='POST'
                     onSubmit={addFormik.handleSubmit}
@@ -625,7 +620,7 @@ function index() {
     return (
         <>
             {!isLoading && products ? (
-                <div  className="w-full mx-auto bg-white rounded-sm border border-gray-200">
+                <div  className="w-full mx-auto bg-white rounded-sm">
                     <Drawer
                         buttonContent={null}
                         isOpen={isDrawerUpdateFormOpen}
@@ -665,8 +660,8 @@ function index() {
                     <Table
                         data={products}
                         columns={columns}
-                        subHeader="Ürünlerinizi yönetin ve satışınızı görüntüleyin."
                         searchFilter={true}
+                        setQueryUrl={setQueryUrl}
                     />
                 </div>
             ): (

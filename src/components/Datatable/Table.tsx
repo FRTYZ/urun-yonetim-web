@@ -24,8 +24,8 @@ import XButton from "../FormElements/XButton";
 interface TableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    subHeader?: string;
     searchFilter?: boolean;
+    setQueryUrl:  (url: string) => void;
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -40,8 +40,8 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 export function Table<TData, TValue>({
     columns,
     data,
-    subHeader,
     searchFilter = false,
+    setQueryUrl
 }: TableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
@@ -84,17 +84,15 @@ export function Table<TData, TValue>({
 
     return (
         <>
-            <div className="grid grid-cols-2 items-center pl-3 py-4">
-            <p>{subHeader}</p>
             {searchFilter && (
                 <Filters 
                     pageSize={table.getState().pagination.pageSize}
                     setPageSize={table.setPageSize}
                     globalFilter={globalFilter ?? ""}
                     setGlobalFilter={setGlobalFilter}
+                    setQueryUrl={setQueryUrl}
                 />
             )} 
-            </div>
             <div className="overflow-x-auto">
                 <table className="table-auto w-full">
                     <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
@@ -150,7 +148,7 @@ export function Table<TData, TValue>({
                                 </tr>
                             )}
                     </tbody>
-                    <tfoot className="table-caption caption-bottom border-t border-gray-300">
+                    <tfoot className="table-caption caption-bottom border-y border-gray-400">
                       <div className="grid grid-cols-2 gap-4 items-center my-2 mx-4">
                           <div className="flex-1 text-sm text-muted-foreground">
                               {showDataText}
