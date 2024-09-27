@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react';
 
+import Swal from 'sweetalert2'
+
 export interface XFileProps {
     label: string;
     name: string;
@@ -97,7 +99,7 @@ export const OldFileInput = ({name, value, type, handleFormik}: OldFileInputProp
     )
 }
 
-export const XFile = ({label, name, oldFileName, type, setAlert, handleFormik, hasError, ...rest}: XFileProps) => {
+export const XFile = ({label, name, oldFileName, type, handleFormik, hasError, ...rest}: XFileProps) => {
     const [file, setFile] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLDivElement | any>(null);
 
@@ -110,20 +112,20 @@ export const XFile = ({label, name, oldFileName, type, setAlert, handleFormik, h
             if(type == 'image'){
                 if(new RegExp("image/*").test(files[0].type)){
                     handleFormik.setFieldValue(name, files[0]);
-                    setFile(files)
+                    setFile(files);
                 }else{
-                    setAlert({
-                        type: 'error',
-                        message: 'Seçtiğiniz dosya image olmalı'
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata',
+                        text: 'Seçtiğiniz dosya image olmalı',
                     })
-                    fileInputRef.current.value! = null
+                    fileInputRef.current.value! = null;
                 }
             }else{
                 handleFormik.setFieldValue(name, files[0]);
                 setFile(files)
             }
             handleFormik.setFieldValue(oldFileName, undefined)
-            
         }
     }
 
@@ -142,7 +144,7 @@ export const XFile = ({label, name, oldFileName, type, setAlert, handleFormik, h
                     type="file"
                     name={name}
                     id={name}
-                    onChange={(event) => { 
+                    onChange={(event) => {
                         handleFormik.handleChange(event);
                         handleUploadFiles(event)
                     }}
@@ -160,7 +162,6 @@ export const XFile = ({label, name, oldFileName, type, setAlert, handleFormik, h
             </label>
             {hasError && <p className="mt-2 text-red-400">{hasError}</p>}
         </div>
-            
     )
 
     return (

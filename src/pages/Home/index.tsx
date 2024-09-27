@@ -65,8 +65,7 @@ function index() {
         data: products, 
         isLoading, 
         isError, 
-        error, 
-        refetch 
+        error
       } = useQuery<ProductsProps[]>(['products', queryUrl], () => getProducts(), {
         staleTime: 1000 * 60 * 5,
         cacheTime: 1000 * 60 * 30,
@@ -269,12 +268,12 @@ function index() {
             description: '',
             price: '',
             stock: '',
-            featuredImage: ''
+            addFeaturedImage: ''
         },
         onSubmit: async (values, { resetForm }) => {
-            const {name, description, price, stock, featuredImage } = values;
-
-            if(name == '' || description == '' || price == '' || stock == '' || featuredImage == ''){
+            const {name, description, price, stock, addFeaturedImage } = values;
+            console.log(values)
+            if(name == '' || description == '' || price == '' || stock == '' || addFeaturedImage == ''){
              
                 Swal.fire({
                     icon: 'error',
@@ -288,7 +287,7 @@ function index() {
                 formdata.append("description", description!);
                 formdata.append("price", price!);
                 formdata.append("stock", stock!);
-                formdata.append('featuredImage', featuredImage);
+                formdata.append('featuredImage', addFeaturedImage);
                 
                 const url = '/product/list';
 
@@ -333,9 +332,12 @@ function index() {
             featuredImage: ''
         },
         onSubmit: async (values, { resetForm }) => {
-            const {name, description, price, stock, featuredImage } = values;
+            const {name, description, price, stock, featuredImage, oldImage } = values;
 
-            if(name == '' || description == '' || price == ''){
+            console.log(oldImage)
+            console.log(featuredImage)
+
+            if(name == '' || description == '' || price == '' || (!oldImage && featuredImage == '' )){
                 Swal.fire({
                     icon: 'error',
                     title: 'Hata',
@@ -414,7 +416,7 @@ function index() {
                 Swal.fire({
                     icon: 'success',
                     title: 'İşlem Başarılı',
-                    html: 'Ürün başarıyla güncellendi',
+                    html: 'Ürün başarıyla silindi.',
                     confirmButtonText: 'Tamam'
                 });
                 queryClient.invalidateQueries('products');
@@ -445,13 +447,13 @@ function index() {
                 >
                     <XFile 
                         label='Ürün fotoğrafı'
-                        name="featuredImage"
+                        name="addFeaturedImage"
                         oldFileName=''
                         type='image'
                         handleFormik={addFormik}
                         accept='image/png, image/jpeg'
                         tabIndex={1}
-                        hasError={Boolean(addFormik.values.featuredImage == '' && addFormik.touched.featuredImage) ? 'Ürün fotoğrafını seçmelisiniz.' : ''}
+                        hasError={Boolean(addFormik.values.addFeaturedImage == '' && addFormik.touched.addFeaturedImage) ? 'Ürün fotoğrafını seçmelisiniz.' : ''}
                     />
                     <XInput
                         type='text'
@@ -539,7 +541,7 @@ function index() {
                         handleFormik={updateFormik}
                         accept='image/png, image/jpeg'
                         tabIndex={1}
-                        hasError={Boolean(updateFormik.values.featuredImage == '' && addFormik.touched.featuredImage) ? 'Ürün fotoğrafını seçmelisiniz.' : ''}
+                        hasError={Boolean(!(updateFormik.values.oldImage) && updateFormik.values.featuredImage == '' && updateFormik.touched.featuredImage) ? 'Ürün fotoğrafını seçmelisiniz.' : ''}
                     />
                     <OldFileInput 
                         name="oldImage"
