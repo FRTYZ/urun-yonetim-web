@@ -209,7 +209,7 @@ function index() {
             },
             {
                 id: "actions",
-                header: () => <span  className="whitespace-nowrap hover:text-zinc-700">Actions</span>,
+                header: () => <span  className="whitespace-nowrap hover:text-zinc-700">İşlemler</span>,
                 cell: ({ row }) => {
                     const data = row.original
                     return (
@@ -618,56 +618,54 @@ function index() {
     )
 
     return (
-        <>
-            {!isLoading && products ? (
-                <div  className="w-full mx-auto bg-white rounded-sm ">
-                    <Drawer
-                        buttonContent={null}
-                        isOpen={isDrawerUpdateFormOpen}
-                        onOpenChange={(open) => setIsDrawerFormOpen(open)}
+        <div  className="w-full mx-auto bg-white rounded-sm ">
+            <Drawer
+                buttonContent={null}
+                isOpen={isDrawerUpdateFormOpen}
+                onOpenChange={(open) => setIsDrawerFormOpen(open)}
+                backgroundColor='bg-white dark:bg-primary-dark'
+                side='right'
+                padding='px-8 pt-12'
+                width='w-[100vw] lg:w-[80vw]'
+            >
+                {updateProductForm}
+            </Drawer>
+            <header  className="grid grid-cols-2 px-3 py-4 items-center border-b border-gray-100">
+                <h2  className="font-semibold text-gray-800">Ürünler</h2>
+                <div  className="text-end">
+                        <Drawer
+                        buttonContent={
+                            <XButton 
+                                label="Yeni Ürün Ekle"
+                                backgroundColor='bg-white'
+                                textStyle='text-black text-[16px] font-[600]'
+                                padding='px-4 py-2'
+                                radius='rounded-lg'
+                                addStyle="!w-fit border border-gray-500"
+                            />
+                        }
+                        isOpen={isDrawerOpen}
+                        onOpenChange={(open) => setIsDrawerOpen(open)}
                         backgroundColor='bg-white dark:bg-primary-dark'
                         side='right'
                         padding='px-8 pt-12'
                         width='w-[100vw] lg:w-[80vw]'
                     >
-                        {updateProductForm}
+                        {addProductForm}
                     </Drawer>
-                    <header  className="grid grid-cols-2 px-3 py-4 items-center border-b border-gray-100">
-                        <h2  className="font-semibold text-gray-800">Ürünler</h2>
-                        <div  className="text-end">
-                             <Drawer
-                                buttonContent={
-                                    <XButton 
-                                        label="Yeni Ürün Ekle"
-                                        backgroundColor='bg-white'
-                                        textStyle='text-black text-[16px] font-[600]'
-                                        padding='px-4 py-2'
-                                        radius='rounded-lg'
-                                        addStyle="!w-fit border border-gray-500"
-                                    />
-                                }
-                                isOpen={isDrawerOpen}
-                                onOpenChange={(open) => setIsDrawerOpen(open)}
-                                backgroundColor='bg-white dark:bg-primary-dark'
-                                side='right'
-                                padding='px-8 pt-12'
-                                width='w-[100vw] lg:w-[80vw]'
-                            >
-                                {addProductForm}
-                            </Drawer>
-                        </div>
-                    </header>
-                    <Table
-                        data={products}
-                        columns={columns}
-                        searchFilter={true}
-                        setQueryUrl={setQueryUrl}
-                    />
                 </div>
+            </header>
+            {!isLoading && products ? (
+                <Table
+                    data={products}
+                    columns={columns}
+                    searchFilter={true}
+                    setQueryUrl={setQueryUrl}
+                />
             ): (
                 <TableLazy />
             )}
-        </>
+        </div>
     )
 }
 

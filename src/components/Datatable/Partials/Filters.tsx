@@ -266,12 +266,9 @@ const Filters = ({
                         buttonContent={
                             <XButton 
                                 label={
-                                    <>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-funnel-fill w-4 h-4" viewBox="0 0 16 16">
                                         <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/>
                                     </svg>
-                                    
-                                    </>
                                 }
                                 backgroundColor='bg-white'
                                 textStyle='text-black text-[16px] font-[600]'
@@ -287,7 +284,7 @@ const Filters = ({
                         padding='px-8 pt-12'
                         width='w-[100vw] lg:w-[80vw]'
                     >
-                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+                        <div className="grid grid-cols-1 gap-4 mt-5 lg:grid-cols-5">
                             {hasStokSelect}
                             {minPriceInput}
                             {maxPriceInput}

@@ -85,7 +85,7 @@ export function Table<TData extends TableRowData, TValue>({
             )} 
             <div className="overflow-x-auto">
                 <table className="table-auto w-full">
-                    <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                    <thead className="text-xs font-semibold uppercase text-gray-500 bg-gray-50">
                       {table.getHeaderGroups().map((headerGroup) => (
                           <tr key={headerGroup.id}>
                               {headerGroup.headers.map((header) => {
