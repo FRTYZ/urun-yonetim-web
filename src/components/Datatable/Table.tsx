@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import {
     ColumnDef,
@@ -20,8 +20,7 @@ import Filters from "./Partials/Filters";
 import XButton from "../FormElements/XButton";
 
 interface TableRowData {
-    stock: number;
-    // Diğer alanlar burada tanımlanabilir
+    stock: number
 }
 
 interface TableProps<TData, TValue> {
@@ -30,7 +29,6 @@ interface TableProps<TData, TValue> {
     searchFilter?: boolean;
     setQueryUrl:  (url: string) => void;
 }
-
 
 export function Table<TData extends TableRowData, TValue>({
     columns,
@@ -136,7 +134,7 @@ export function Table<TData extends TableRowData, TValue>({
                                     <td className="p-2 whitespace-nowrap h-24 text-center"
                                         colSpan={columns.length}
                                     >
-                                        Kayıt yok
+                                        Veri bulunmuyor. Dilerseniz yeni kayıt ekleyebilirsiniz.
                                     </td>
                                 </tr>
                             )}
