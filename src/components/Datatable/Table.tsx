@@ -14,8 +14,6 @@ import {
     getSortedRowModel,
 } from "@tanstack/react-table";
 
-import { rankItem } from "@tanstack/match-sorter-utils";
-
 import Filters from "./Partials/Filters";
 
 // FormElements
@@ -27,14 +25,6 @@ interface TableProps<TData, TValue> {
     searchFilter?: boolean;
     setQueryUrl:  (url: string) => void;
 }
-
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-    const itemRank = rankItem(row.getValue(columnId), value);
-
-    addMeta({ itemRank });
-
-    return itemRank.passed;
-};
 
 
 export function Table<TData, TValue>({
@@ -64,9 +54,6 @@ export function Table<TData, TValue>({
         onRowSelectionChange: setRowSelection,
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
-        filterFns: {
-            fuzzy: fuzzyFilter,
-        },
         state: {
             sorting,
             columnFilters,
