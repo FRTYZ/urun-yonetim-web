@@ -270,9 +270,29 @@ function index() {
             stock: '',
             addFeaturedImage: ''
         },
+        validate: (values) => {
+            const errors: { [key: string]: string } = {};
+
+            const {name, description, price, stock } = values;
+
+            if (name == '') {
+              errors.name = "Ürün adı doldurmalısınız";
+            }
+            if (description == '') {
+              errors.description = "Ürün açıklamasını doldurmalısınız";
+            }
+            if (price == '') {
+              errors.price = "Ürün fiyatı belirlemelisiniz";
+            }
+            if (stock == '') {
+              errors.stock = "Ürün stok durumunu belirlemelisiniz";
+            }
+
+            return errors;
+        },
         onSubmit: async (values, { resetForm }) => {
             const {name, description, price, stock, addFeaturedImage } = values;
-            console.log(values)
+
             if(name == '' || description == '' || price == '' || stock == '' || addFeaturedImage == ''){
              
                 Swal.fire({
@@ -331,11 +351,28 @@ function index() {
             oldImage: (selectData?.featuredImage ? [selectData?.featuredImage] : ''),
             featuredImage: ''
         },
+        validate: (values) => {
+            const errors: { [key: string]: string } = {};
+
+            const {name, description, price, stock } = values;
+
+            if (name == '') {
+              errors.name = "Ürün adı doldurmalısınız";
+            }
+            if (description == '') {
+              errors.description = "Ürün açıklamasını doldurmalısınız";
+            }
+            if (price == '') {
+              errors.price = "Ürün fiyatı belirlemelisiniz";
+            }
+            if (stock == '') {
+              errors.stock = "Ürün stok durumunu belirlemelisiniz";
+            }
+
+            return errors;
+        },
         onSubmit: async (values, { resetForm }) => {
             const {name, description, price, stock, featuredImage, oldImage } = values;
-
-            console.log(oldImage)
-            console.log(featuredImage)
 
             if(name == '' || description == '' || price == '' || (!oldImage && featuredImage == '' )){
                 Swal.fire({
@@ -461,7 +498,7 @@ function index() {
                         placeholder='Ürün Adı'
                         labelType='top'
                         label='Ürün Adı'
-                        errorMessage={Boolean(addFormik.values.name == '' && addFormik.touched.name) ? 'Ürün adı doldurmalısınız' : ''}
+                        errorMessage={addFormik.errors.name}
                         value={addFormik.values.name}
                         onChange={addFormik.handleChange}
                         tabIndex={2}
@@ -472,7 +509,7 @@ function index() {
                         placeholder='Ürün Açıklaması'
                         labelType='top'
                         label='Ürün Açıklaması'
-                        errorMessage={Boolean(addFormik.values.description == '' && addFormik.touched.description) ? 'Ürün açıklamasını doldurmalısınız' : ''}
+                        errorMessage={addFormik.errors.description}
                         value={addFormik.values.description}
                         onChange={addFormik.handleChange}
                         tabIndex={3}
@@ -483,13 +520,14 @@ function index() {
                         placeholder='Ürün Fiyatı'
                         labelType='top'
                         label='Ürün Fiyatı'
-                        errorMessage={Boolean(addFormik.values.price == '' && addFormik.touched.price) ? 'Ürün fiyatı belirlemelisiniz' : ''}
+                        errorMessage={addFormik.errors.price}
                         value={addFormik.values.price}
                         onChange={(event) =>{
                             const filterValue = NumberInput(event, 1);
                             filterValue && addFormik.setFieldValue('price', filterValue && filterValue);
                         }}
                         tabIndex={4}
+                        helperText='Ürün fiyatı pozitif değer olmalıdır.'
                     />
                     <XInput
                         type='number'
@@ -497,13 +535,14 @@ function index() {
                         placeholder='Stok miktarı'
                         labelType='top'
                         label='Stok miktarı'
-                        errorMessage={Boolean(addFormik.values.stock == '' && addFormik.touched.stock) ? 'Ürün stok durumunu belirlemelisiniz' : ''}
+                        errorMessage={addFormik.errors.stock}
                         value={addFormik.values.stock}
                         onChange={(event) =>{
                             const filterValue =  NumberInput(event);
                             filterValue && addFormik.setFieldValue('stock', filterValue);
                         }}
                         tabIndex={5}
+                        helperText="Ürün stok durumunu 0'dan büyük değer olmalıdır. 0 değeri stok yok durumunu temsil eder. "
                     />
                     <div className="md:col-span-5 text-right">
                         <XButton 
@@ -514,6 +553,7 @@ function index() {
                             radius='rounded-lg'
                             addStyle="!w-fit"
                             tabIndex={6}
+                            disabled={!addFormik.isValid}
                         />
                     </div>
                 </form>
@@ -555,7 +595,7 @@ function index() {
                         placeholder='Ürün Adı'
                         labelType='top'
                         label='Ürün Adı'
-                        errorMessage={Boolean(updateFormik.values.name == '' && updateFormik.touched.name) ? 'Ürün adı doldurmalısınız' : ''}
+                        errorMessage={updateFormik.errors.name}
                         value={updateFormik.values.name}
                         onChange={updateFormik.handleChange}
                         tabIndex={2}
@@ -566,7 +606,7 @@ function index() {
                         placeholder='Ürün Açıklaması'
                         labelType='top'
                         label='Ürün Açıklaması'
-                        errorMessage={Boolean(updateFormik.values.description == '' && updateFormik.touched.description) ? 'Ürün açıklamasını doldurmalısınız' : ''}
+                        errorMessage={updateFormik.errors.description}
                         value={updateFormik.values.description}
                         onChange={updateFormik.handleChange}
                         tabIndex={3}
@@ -577,7 +617,7 @@ function index() {
                         placeholder='Ürün Fiyatı'
                         labelType='top'
                         label='Ürün Fiyatı'
-                        errorMessage={Boolean(updateFormik.values.price == '' && updateFormik.touched.price) ? 'Ürün fiyatı belirlemelisiniz' : ''}
+                        errorMessage={updateFormik.errors.price}
                         value={String(updateFormik.values.price)}
                         onChange={(event) =>{
                             const filterValue =  NumberInput(event, 1);
@@ -585,6 +625,7 @@ function index() {
                             filterValue && updateFormik.setFieldValue('price', filterValue);
                         }}
                         tabIndex={4}
+                        helperText='Ürün fiyatı pozitif değer olmalıdır.'
                     />
                     <XInput
                         type='number'
@@ -592,9 +633,9 @@ function index() {
                         placeholder='Stok miktarı'
                         labelType='top'
                         label='Stok miktarı'
-                        errorMessage={Boolean(updateFormik.values.stock == '' && updateFormik.touched.stock) ? 'Ürün stok durumunu belirlemelisiniz' : ''}
+                        errorMessage={updateFormik.errors.stock}
                         value={String(updateFormik.values.stock)}
-                        helperText='Stok durumunu 0 değeriyle stoktan kaldırabilirsiniz.'
+                        helperText="Ürün stok durumunu 0'dan büyük değer olmalıdır. 0 değeri stok yok durumunu temsil eder. "
                         onChange={(event) =>{
                             const filterValue =  NumberInput(event);
                             
@@ -609,6 +650,7 @@ function index() {
                             backgroundColor='bg-black'
                             textStyle='text-white text-[16px] font-[600]'
                             padding='px-8 py-3'
+                            disabled={!updateFormik.dirty || !updateFormik.isValid}
                             radius='rounded-lg'
                             addStyle="!w-fit"
                             tabIndex={6}
