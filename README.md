@@ -1,22 +1,26 @@
-# MUHİKU - Ürün Yönetim Sistemi Case Study | Fırat Yıldız
+# MUHİKU - Ürün Yönetim Sistemi Case Study - WEB | Fırat Yıldız
 
-Merhaba, Projenin frontend tarafı tamamlandım, proje tailwind css ile sade tasarımla ve kullanıcı dostu bir arayüz oluşturdum. projenin backend ile birlikte çalışmaktadır. [Ürün Yönetim Backend Github](https://github.com/FRTYZ/urun-yonetim-backend) ile kurulum işlemlerinizi tamamlayabilirsiniz.
+Merhaba, Projenin frontend tarafını tamamladım, projeyi Tailwind CSS ile sade tasarım ve kullanıcı dostu bir arayüz oluşturdum. Proje, backend ile birlikte çalışmaktadır. [Ürün Yönetim Backend Github](https://github.com/FRTYZ/urun-yonetim-backend) ile kurulum işlemlerinizi tamamlayabilirsiniz.
 
 ![alt text](https://raw.githubusercontent.com/FRTYZ/urun-yonetim-web/main/public/home.png)
 
-## Teknolojiler 🛠
+## 🛠 Teknolojiler 
 - Typescript
 - React.js
 - Tailwind CSS
 
-## Development 💻
+## 🚀 Live (Demo)
 
-Projeyi localinizde çalıştırmak için gerekli adımlar aşağıda verilmiştir.
+[urun-yonetim-web.vercel.app](https://urun-yonetim-web.vercel.app/)
+
+## 💻 Development 
+
+Projeyi localinizde çalıştırmak için gerekli adımlar aşağıda bulabilirsiniz.
 
 1. Projeyi git ile clone ediniz.
 
     ```
-    https://github.com/FRTYZ/urun-yonetim-web.git
+    git clone https://github.com/FRTYZ/urun-yonetim-web.git
     ```
 
 2. Aşağıdaki komutları kullanarak npm paketlerinin kurulmasını sağlıyabilirsiniz.
@@ -26,12 +30,11 @@ Projeyi localinizde çalıştırmak için gerekli adımlar aşağıda verilmişt
     npm run dev
     ```
 
-3. Projenin ana dizininde `.env` dosyasını oluşturup, backend'de bağlıyabilirsiniz. backend `8080` portunda çalışcaktır. 
+3. Projenin ana dizininde `.env` dosyasını oluşturup, backend'te olan url alıp, `VITE_ENDPOINT` değerini girerek, backendi bağlıyabilirsiniz.
 
     ```
     VITE_ENDPOINT = http://localhost:8080
     ```
-
 
 ## package.json
 
