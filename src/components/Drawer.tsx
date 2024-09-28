@@ -137,12 +137,12 @@ export default function Drawer({
                                 )}
                             >
                                 <div
-                                    className={`
-                                         ${side == 'right' || side == 'left' ? 'w-[92vw]' : 'w-full'} ${width} flex flex-col h-full ${backgroundColor} ${padding} shadow-xl
+                                    className={` overflow-y-scroll
+                                        ${width} flex flex-col h-full ${backgroundColor} ${padding} shadow-xl
                                     `}
                                 >
                                     {!hiddenCloseIcon && 
-                                        <button className="absolute top-2 right-4" onClick={() => handleOpenChange(false)}>
+                                        <button className="absolute top-2 right-4 lg:right-6" onClick={() => handleOpenChange(false)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className={`bi bi-x-lg w-8 h-8 text-black text-${colorCloseIcon}`} viewBox="0 0 16 16">
                                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                                             </svg>

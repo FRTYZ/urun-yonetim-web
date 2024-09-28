@@ -283,7 +283,7 @@ const Filters = ({
                         backgroundColor='bg-white dark:bg-primary-dark'
                         side='right'
                         padding='px-8 pt-12'
-                        width='w-[100vw] lg:w-[80vw]'
+                        width='!w-[100vw] lg:w-[80vw]'
                     >
                         <div className="grid grid-cols-1 gap-4 mt-5 lg:grid-cols-5">
                             {hasStokSelect}

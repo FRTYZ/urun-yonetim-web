@@ -225,7 +225,7 @@ function index() {
                                 }
                                 backgroundColor='bg-black'
                                 textStyle='text-white text-[16px] font-[600]'
-                                padding='px-8 py-3'
+                                padding='px-4 py-2 lg:px-8 lg:py-3'
                                 radius='rounded-lg'
                                 addStyle="!w-fit flex items-center gap-2"
                                 onClick={() => 
@@ -246,7 +246,7 @@ function index() {
                                 }
                                 backgroundColor='bg-red-500'
                                 textStyle='text-white text-[16px] font-[600]'
-                                padding='px-8 py-3'
+                                padding='px-4 py-2 lg:px-8 lg:py-3'
                                 radius='rounded-lg'
                                 addStyle="!w-fit flex items-center gap-2"
                                 onClick={() => handleDeleteProduct(data)}
@@ -677,13 +677,13 @@ function index() {
             <header  className="grid grid-cols-2 py-4 items-center border-b border-gray-100">
                 <h2  className="font-semibold text-gray-800">Ürünler</h2>
                 <div  className="text-end">
-                        <Drawer
+                    <Drawer
                         buttonContent={
                             <XButton 
                                 label="Yeni Ürün Ekle"
                                 backgroundColor='bg-white'
                                 textStyle='text-black text-[16px] font-[600]'
-                                padding='px-4 py-2'
+                                padding='px-4 py-2 lg:px-8 lg:py-3'
                                 radius='rounded-lg'
                                 addStyle="!w-fit border border-gray-500"
                             />
@@ -693,7 +693,7 @@ function index() {
                         backgroundColor='bg-white dark:bg-primary-dark'
                         side='right'
                         padding='px-8 pt-12'
-                        width='w-[100vw] lg:w-[80vw]'
+                        width='!w-[100vw] lg:w-[80vw]'
                     >
                         {addProductForm}
                     </Drawer>
