@@ -118,6 +118,7 @@ const Filters = ({
             labelType="top"
             inputClassName="h-5"
             placeholder="İletişime geçmenizin sebebi nedir?"
+            value={selectStock}
             values={[
                 {
                     value: "",
